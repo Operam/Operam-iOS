@@ -1,0 +1,6 @@
+framework module Operam {
+  umbrella header "Operam.h"
+
+  export *
+  module * { export * }
+}
