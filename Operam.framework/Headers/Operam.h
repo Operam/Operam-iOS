@@ -103,18 +103,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL collectUserDefaults;
 
 /**
- *  The OperamProcessType that decides how an Issue Submission is launched.
- *
- *  - OperamProcessTypeShakeGesture -
- *      Shake phone to launch an Issue Submission
- *
- *  - OperamProcessTypeManual -
- *      Call the manuallyBeginIssueSubmission method to launch an Issue Submission
- *
- *  - OperamProcessTypeScreenshot -
- *      Press the home and power buttons at the same time to launch an Issue Submission
+ *  The OperamProcessType that decides how an issue submission is launched.
+ *  - OperamProcessTypeShakeGesture - shake device
+ *  - OperamProcessTypeManual - call the `presentReportIssueController` method
+ *  - OperamProcessTypeScreenshot - press the home and power buttons at the same time
  */
-@property (nonatomic, assign) OperamProcessType processType;
+@property (nonatomic, assign, readonly) OperamProcessType processType;
 
 /**
  *  The Operam delegate to customize some of the available functionality.
@@ -124,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Access the singleton Operam instance.
  *
- *  @return The single Operam instance
+ *  @return The Operam instance
  */
 + (instancetype)sharedInstance;
 
@@ -136,24 +130,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Starts up the Operam infrastructure for your application, identified by the
- *  given API key.
+ *  given API key. It will use the default OperamProcessTypeShakeGesture.
  *
  *  @param apiKey The Operam API key for this application
  *
- *  @return The singleton Operam instance
+ *  @return The Operam instance
  */
 + (instancetype)startWithAPIKey:(NSString *)apiKey;
+
+/**
+ *  Starts up the Operam infrastructure for your application, identified by the
+ *  given API key. It will use the default OperamProcessTypeShakeGesture.
+ *
+ *  @param apiKey The Operam API key for this application
+ *  @param processType The process to trigger the reporting interface
+ *
+ *  @return The Operam instance
+ */
++ (instancetype)startWithAPIKey:(NSString *)apiKey processType:(OperamProcessType)processType;
 
 /**
  *  Alternate factory method which allows the debug mode to be enabled from
  *  the beginning.
  *
  *  @param apiKey The Operam API key for this application
+ *  @param processType The process to trigger the reporting interface
  *  @param debug Whether to process things in debug mode
  *
- *  @return The singleton Operam instance
+ *  @return The Operam instance
  */
-+ (instancetype)startWithAPIKey:(NSString *)apiKey debug:(BOOL)debug;
++ (instancetype)startWithAPIKey:(NSString *)apiKey processType:(OperamProcessType)processType debug:(BOOL)debug;
 
 /**
  *  Sets the user identifier for the current user session.
