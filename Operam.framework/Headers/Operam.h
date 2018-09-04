@@ -14,6 +14,12 @@ typedef NS_ENUM(NSInteger, OperamLogLevel) {
     OperamLogLevelDebug
 };
 
+typedef NS_ENUM(NSInteger, OperamProcessType) {
+    OperamProcessTypeShakeGesture,
+    OperamProcessTypeManual,
+    OperamProcessTypeScreenshot
+};
+
 #define Operam_Log(logLevel, functionName, frmt, ...)    \
     do {                                                 \
         [[Operam sharedInstance]                         \
@@ -49,12 +55,6 @@ typedef NS_ENUM(NSInteger, OperamLogLevel) {
 #define OperamCreateEvent(title) \
     Operam_Event(__PRETTY_FUNCTION__, title, NO)
 
-typedef NS_ENUM(NSInteger, OperamProcessType) {
-    OperamProcessTypeShakeGesture,
-    OperamProcessTypeManual,
-    OperamProcessTypeScreenshot
-};
-
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -77,12 +77,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  API key associated with this Operam account.
  */
-@property (nonatomic, readonly, copy) NSString *apiKey;
+@property (nonatomic, copy, readonly) NSString *apiKey;
 
 /**
  *  Version number of the Operam framework.
  */
-@property (nonatomic, readonly, copy) NSString *version;
+@property (nonatomic, copy, readonly) NSString *version;
 
 /**
  *  Whether to log debug information within the Operam framework itself. 
@@ -120,7 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The Operam instance
  */
-+ (instancetype)sharedInstance;
++ (instancetype)sharedInstance NS_SWIFT_NAME(shared());
 
 /**
  *  Takes a screenshot of what is being displayed to the user, and presents 
@@ -308,6 +308,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param key The key associated with the elapsed time measurement.
  */
 - (void)stopTrackingTimeForKey:(NSString *)key;
+
+/**
+ * Operam should not be initialized directly -- call +[Operam sharedInstance] to
+ * properly configure the Operam singleton.
+ */
+- (instancetype)init NS_UNAVAILABLE;
 
 @end
 
