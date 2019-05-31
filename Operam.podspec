@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     s.name                  = "Operam"
-    s.version               = "0.9.8"
-    s.summary               = "User feedback solved."
+    s.version               = "0.9.10"
+    s.summary               = "Telemetry & Error Reporting Solved."
     s.description           = "Feedback / bug reporting system for iOS applications with a developer productivity slant."
     s.homepage              = "https://operamhq.com"
     s.license               = { "type" => "Commercial", "text" => "See https://operamhq.com/terms-of-service"}

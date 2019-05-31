@@ -7,54 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSInteger, OperamLogLevel) {
-    OperamLogLevelInfo,
-    OperamLogLevelError,
-    OperamLogLevelDebug
-};
-
-typedef NS_ENUM(NSInteger, OperamProcessType) {
-    OperamProcessTypeShakeGesture,
-    OperamProcessTypeManual,
-    OperamProcessTypeScreenshot
-};
-
-#define Operam_Log(logLevel, functionName, frmt, ...)    \
-    do {                                                 \
-        [[Operam sharedInstance]                         \
-                logWithLevel:logLevel                    \
-                file:__FILE__                            \
-                function:functionName                    \
-                line:__LINE__                            \
-                format:(frmt), ## __VA_ARGS__];          \
-    } while (0)
-
-#define OperamLogError(frmt, ...) \
-    Operam_Log(OperamLogLevelError, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
-
-#define OperamLogInfo(frmt, ...)  \
-    Operam_Log(OperamLogLevelInfo, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
-
-#define OperamLogDebug(frmt, ...) \
-    Operam_Log(OperamLogLevelDebug, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
-
-#define Operam_Event(functionName, title, attachmentsEnabled)   \
-    do {                                                        \
-        [[Operam sharedInstance]                                \
-                recordEvent:title                               \
-                file:__FILE__                                   \
-                function:functionName                           \
-                line:__LINE__                                   \
-                includeAttachments:attachmentsEnabled];         \
-    } while (0)
-
-#define OperamCreateEventWithAttachments(title) \
-    Operam_Event(__PRETTY_FUNCTION__, title, YES)
-
-#define OperamCreateEvent(title) \
-    Operam_Event(__PRETTY_FUNCTION__, title, NO)
-
+#import "Operam_Constants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,9 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol OperamDelegate <NSObject>
 
-- (void)operamDidGenerateUserIssueSubmission:(Operam *)operam;
-
 @optional
+- (void)operamDidGenerateUserIssueSubmission:(Operam *)operam;
 - (BOOL)operamShouldDisplayConfirmationMessage:(Operam *)operam;
 - (BOOL)operamShouldDisplayInstructionView:(Operam *)operam;
 
@@ -91,16 +43,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL debug;
 
 /**
- *  Whether to optimize the final size of the screenshot to use less bandwidth.
- *  Defaults to YES.
- */
-@property (nonatomic, assign) BOOL optimizeScreenshot;
-
-/**
  *  Whether to collect the contents of NSUserDefaults for every issue/event.
  *  Defaults to YES.
  */
 @property (nonatomic, assign) BOOL collectUserDefaults;
+
+/**
+ *  Whether to save the user's location (GPS coordinate) with every issue/event.
+ *  Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL saveUserLocation;
 
 /**
  *  The OperamProcessType that decides how an issue submission is launched.
@@ -188,6 +140,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param email The user's email address
  */
 - (void)setUserEmail:(nullable NSString *)email;
+
+/**
+ *  Resets the user identifier, username, user full name, and user email values.
+ */
+- (void)clearUserInformation;
 
 /**
  *  Stores a dictionary (as a JSON encoded string) for a given key.
